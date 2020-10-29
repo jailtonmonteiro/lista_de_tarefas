@@ -68,18 +68,30 @@ class _HomeState extends State<Home> {
 
   //Displaying items in the table
   Widget buildItem(context, index) {
-    return CheckboxListTile(
-      title: Text(_toDoList[index]["title"]),
-      value: _toDoList[index]["done"],
-      secondary: CircleAvatar(
-        child: Icon(_toDoList[index]["done"] ? Icons.check : Icons.error),
+    return Dismissible(
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+      background: Container(
+          color: Colors.red,
+          child: Align(
+              alignment: Alignment(-0.9, 0.0),
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ))),
+      direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        title: Text(_toDoList[index]["title"]),
+        value: _toDoList[index]["done"],
+        secondary: CircleAvatar(
+          child: Icon(_toDoList[index]["done"] ? Icons.check : Icons.error),
+        ),
+        onChanged: (value) {
+          setState(() {
+            _toDoList[index]["done"] = value;
+            _saveData();
+          });
+        },
       ),
-      onChanged: (value) {
-        setState(() {
-          _toDoList[index]["done"] = value;
-          _saveData();
-        });
-      },
     );
   }
 
