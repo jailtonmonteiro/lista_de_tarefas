@@ -66,6 +66,23 @@ class _HomeState extends State<Home> {
     }
   }
 
+  //Displaying items in the table
+  Widget buildItem(context, index) {
+    return CheckboxListTile(
+      title: Text(_toDoList[index]["title"]),
+      value: _toDoList[index]["done"],
+      secondary: CircleAvatar(
+        child: Icon(_toDoList[index]["done"] ? Icons.check : Icons.error),
+      ),
+      onChanged: (value) {
+        setState(() {
+          _toDoList[index]["done"] = value;
+          _saveData();
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,25 +116,10 @@ class _HomeState extends State<Home> {
           ),
           Expanded(
               child: ListView.builder(
-                  padding: EdgeInsets.only(top: 10.0),
-                  itemCount: _toDoList.length,
-                  itemBuilder: (context, index) {
-                    return CheckboxListTile(
-                      title: Text(_toDoList[index]["title"]),
-                      value: _toDoList[index]["done"],
-                      secondary: CircleAvatar(
-                        child: Icon(_toDoList[index]["done"]
-                            ? Icons.check
-                            : Icons.error),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _toDoList[index]["done"] = value;
-                          _saveData();
-                        });
-                      },
-                    );
-                  }))
+            padding: EdgeInsets.only(top: 10.0),
+            itemCount: _toDoList.length,
+            itemBuilder: buildItem,
+          ))
         ],
       ),
     );
