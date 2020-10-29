@@ -19,6 +19,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _toDoControler = TextEditingController();
 
+  Map<String, dynamic> _lastRemoved;
+  int _lastRemovedPos;
+
   List _toDoList = [];
 
   @override
@@ -92,6 +95,9 @@ class _HomeState extends State<Home> {
           });
         },
       ),
+      onDismissed: (direction) {
+        _lastRemoved = Map.from(_toDoList[index]);
+      },
     );
   }
 
