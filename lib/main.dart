@@ -17,7 +17,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _toDoControler = TextEditingController();
+
   List _toDoList = [];
+
+  void _addToDo() {
+    setState(() {
+      Map<String, dynamic> newToDo = Map();
+      newToDo["title"] = _toDoControler.text;
+      _toDoControler.text = "";
+      newToDo["done"] = false;
+      _toDoList.add(newToDo);
+    });
+  }
 
   //returns used file
   Future<File> _getFile() async {
@@ -58,6 +70,7 @@ class _HomeState extends State<Home> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _toDoControler,
                     decoration: InputDecoration(
                         labelText: "Nova Tarefa",
                         labelStyle: TextStyle(color: Colors.blue)),
@@ -67,7 +80,7 @@ class _HomeState extends State<Home> {
                   color: Colors.blue,
                   child: Text("Adicionar"),
                   textColor: Colors.white,
-                  onPressed: () {},
+                  onPressed: _addToDo,
                 )
               ],
             ),
@@ -78,13 +91,18 @@ class _HomeState extends State<Home> {
                   itemCount: _toDoList.length,
                   itemBuilder: (context, index) {
                     return CheckboxListTile(
-                      title: Text(_toDoList[index]),
+                      title: Text(_toDoList[index]["title"]),
                       value: _toDoList[index]["done"],
                       secondary: CircleAvatar(
-                        child: Icon(_toDoList[index]["title"]
+                        child: Icon(_toDoList[index]["done"]
                             ? Icons.check
                             : Icons.error),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          _toDoList[index]["done"] = value;
+                        });
+                      },
                     );
                   }))
         ],
